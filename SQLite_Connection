@@ -1,0 +1,48 @@
+using UnityEngine;
+using System.Collections;
+// Подключаем необходимые пространства имен
+using System.Data;
+using Mono.Data.Sqlite;
+
+public class Test : MonoBehaviour {
+	public Renderer rend;
+	void Start () {
+		rend = this.GetComponent<Renderer>();
+	}
+
+
+	void OnMouseDown(){
+		//print (rend.name);
+
+		// Подключаемся к нашей базе данных
+		string connectionString = "URI=file:D:/Работа/Unity/BD/Att.sqlite" ;
+		using (IDbConnection dbcon = (IDbConnection)new SqliteConnection(connectionString))
+		{
+			dbcon.Open();
+			// Выбираем нужные нам данные
+			var sql = "SELECT Name FROM Att_1";
+			using (IDbCommand dbcmd = dbcon.CreateCommand())
+			{
+				dbcmd.CommandText = sql;
+				// Выполняем запрос
+				using (IDataReader reader = dbcmd.ExecuteReader())
+				{
+					// Читаем и выводим результат
+					while (reader.Read())
+					{ object nameItem=reader.GetValue(0);
+					// если значение в базе данных соотвтествует имени пикнутого элемента, то выводим его в консоль
+						if(rend.name == nameItem.ToString()){
+						const string frmt = "Name: {0};";
+						Debug.Log(string.Format(frmt,
+						                        reader.GetString(0)));
+						}
+					}
+				}
+			}
+			// Закрываем соединение
+			dbcon.Close();
+		}
+
+
+	}
+}
