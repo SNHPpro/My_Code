@@ -1,0 +1,53 @@
+using UnityEngine;
+using System.Collections;
+using System.Runtime.InteropServices;
+
+public class Cursor_1 : MonoBehaviour {
+    public GameObject _targ;
+    public Camera _camera;
+
+	void Start () {
+        Cursor.SetCursor(null,new Vector2(20000000,300000),CursorMode.ForceSoftware);
+	}
+   [DllImport("user32.dll")]
+    public static extern int SetCursorPos(int x, int y);
+   public Vector2 mousePos;
+    
+ 
+	// Update is called once per frame
+	void Update () {
+     //Quaternion _rotation= Quaternion.LookRotation(_targ.transform.position-_camera.transform.position);
+	 //_camera.transform.rotation=Quaternion. Slerp(_camera.transform.rotation,_rotation,Time.deltaTime*2.0f);
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+       // if (Physics.Raycast(ray, out hit))
+        {
+//            Quaternion _rotation = Quaternion.LookRotation(hit.point - _camera.transform.position);
+            float _h = Input.GetAxis("Mouse X");
+            float _h1 = Input.GetAxis("Mouse Y");
+            if (_h > 0 )
+            {
+              _camera.transform.Rotate(new Vector3(0,1, Time.deltaTime*_h) * Time.deltaTime * 10.0f);
+            }
+            if (_h < 0 )
+            {
+                _camera.transform.Rotate(Vector3.down * Time.deltaTime*10);
+            }
+          
+          // Quaternion _rotation = Quaternion.LookRotation(hit.point - _camera.transform.position);
+            //_camera.transform.rotation = Quaternion.Slerp(_camera.transform.rotation, _rotation, Time.deltaTime * 2.0f);
+
+
+          //  _camera.transform.rotation = Quaternion.Slerp(_camera.transform.rotation, Quaternion.Euler(new Vector3(_rotation.x,_rotation.y,_rotation.z)) , 10.0f);
+
+           // mousePos.x = Input.mousePosition.x;
+           // mousePos.y = Input.mousePosition.y;
+            
+           // SetCursorPos((int)Input.mousePosition.x, (int)Input.mousePosition.y);
+           
+            // Vector3 rot = transform.eulerAngles;w
+           // transform.LookAt(hit.point);
+           // transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y - 90, rot.z);
+        }
+	}
+}
