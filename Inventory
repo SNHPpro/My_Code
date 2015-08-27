@@ -1,0 +1,75 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+public class SU_Inventory : MonoBehaviour {
+    public List<SU_Item>_inventCollection=new List<SU_Item>(10);
+    Rect _mainInvWindow = new Rect(10, 10, Screen.width-20, Screen.height/1.5f);
+    
+	// Use this for initialization
+	void Start () {
+       
+	}
+	
+	// Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {   
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 3))
+            {
+                Debug.DrawLine(ray.origin, hit.point);
+                SU_Item _picItem = hit.collider.GetComponent<SU_Item>();
+                if (_picItem != null && _inventCollection.Count<10)
+                { 
+                    _inventCollection.Insert(0,_picItem);
+                }
+            }
+        }
+	}
+
+    void OnGUI()
+    {
+        _mainInvWindow = GUI.Window(1, _mainInvWindow, GUIWidow, "Инвентарь");
+    }
+
+    void GUIWidow(int id)
+    {
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                GUI.Button(new Rect(50 + (x * 40), 20 + (y * 40), 40, 40), (x + y * 5).ToString());
+            }
+        } 
+    }
+}
+
+
+
+
+
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class SU_Item : MonoBehaviour {
+    public string _name;
+	public Renderer _thisGameObject ;
+    
+
+    // Use this for initialization
+	void Start () {
+        _thisGameObject = this.GetComponent<Renderer>();
+        _name = _thisGameObject.name;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
+
+
