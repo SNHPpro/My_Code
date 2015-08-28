@@ -3,17 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 public class SU_Inventory : MonoBehaviour {
-    public List<SU_Item>_inventCollection=new List<SU_Item>(10);
-    Rect _mainInvWindow = new Rect(10, 10, Screen.width-20, Screen.height/1.5f);
-    
+    public List<SU_Item>_inventCollection=new List<SU_Item>();
+    public float _widthMainWind;
+    public float _heithMainWind;
+    public int _leftMainWind;
+    public int _topMainWind;
+    public Rect _mainInvWindow;
+    public bool _showActiv=false;
+    public int _indexPicItem=0;
+    public int z = 0;
 	// Use this for initialization
 	void Start () {
-       
+        
 	}
 	
 	// Update is called once per frame
     void Update()
     {
+        //_widthMainWind = Screen.width;
+        //_heithMainWind = Screen.height;
+        //_leftMainWind = 0;
+        //_topMainWind = 0;
+        if (Input.GetKeyDown("i")) _showActiv =! _showActiv;
+       
+       
+     //   _mainInvWindow = new Rect(_leftMainWind, _topMainWind, _widthMainWind, _heithMainWind);
         if (Input.GetMouseButtonDown(0))
         {   
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -22,54 +36,54 @@ public class SU_Inventory : MonoBehaviour {
             {
                 Debug.DrawLine(ray.origin, hit.point);
                 SU_Item _picItem = hit.collider.GetComponent<SU_Item>();
-                if (_picItem != null && _inventCollection.Count<10)
+                if (_picItem != null && _inventCollection.Count<28)
                 { 
-                    _inventCollection.Insert(0,_picItem);
+                    _inventCollection.Add(_picItem);
+                    _indexPicItem++;
                 }
             }
         }
 	}
 
-    void OnGUI()
-    {
-        _mainInvWindow = GUI.Window(1, _mainInvWindow, GUIWidow, "Инвентарь");
-    }
+   
 
     void GUIWidow(int id)
     {
-        for (int y = 0; y < 4; y++)
-        {
-            for (int x = 0; x < 5; x++)
+           GUILayout.BeginArea(new Rect(0, 0, 700,100 ));
+            if (_inventCollection.Count > 0)
             {
-                GUI.Button(new Rect(50 + (x * 40), 20 + (y * 40), 40, 40), (x + y * 5).ToString());
+               
+                for (int y = 0; y < _indexPicItem; y++)
+                {
+                    GUI.Button(new Rect(y * 100, 0, 100, 100), _inventCollection[y]._itemTexture);                    
+                }
             }
-        } 
+           GUILayout.EndArea();
+
+        
+        
+        
+        
+
+           
+        //else
+        //{
+        //    for (int y = 0; y < 4; y++)
+        //    {
+        //        for (int x = 0; x < 7; x++)
+        //        {
+        //            GUI.Box(new Rect(x * _widthMainWind / 7, y * _heithMainWind / 4, _widthMainWind / 7, _heithMainWind / 4),"");
+        //        }
+        //    }
+        //}
+       
     }
+
+    void OnGUI()
+    {
+        if (_showActiv)
+            GUI.Window(0, new Rect(150, 150, Screen.width - 300, Screen.height - 300), GUIWidow, "Инвентарь");
+    }
+
 }
-
-
-
-
-
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-public class SU_Item : MonoBehaviour {
-    public string _name;
-	public Renderer _thisGameObject ;
-    
-
-    // Use this for initialization
-	void Start () {
-        _thisGameObject = this.GetComponent<Renderer>();
-        _name = _thisGameObject.name;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}
-
 
